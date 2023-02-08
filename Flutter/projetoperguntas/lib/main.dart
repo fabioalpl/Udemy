@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:projetoperguntas/questao.dart';
-import 'package:projetoperguntas/resposta.dart';
+import 'package:projetoperguntas/questionario.dart';
+import 'package:projetoperguntas/resultado.dart';
 
 /*void main() {
   runApp(const MyApp());
@@ -20,24 +20,41 @@ class _PerguntasAppState extends State<PerguntasApp> {
   final _perguntas = const [
     {
       'texto': "Qual é a sua cor favorita?",
-      'respostas': ['Preto', 'Vermelho', 'Verde', 'Branco'],
+      'respostas': [
+        {'texto': 'Preto', 'nota': 10},
+        {'texto': 'Vermelho', 'nota': 5},
+        {'texto': 'Verde', 'nota': 3},
+        {'texto': 'Branco', 'nota': 1},
+      ],
     },
     {
       'texto': 'Qual é o seu animal favorito?',
-      'respostas': ['Coelho', 'Cobra', 'Elefante', 'Leão'],
+      'respostas': [
+        {'texto': 'Coelho', 'nota': 10},
+        {'texto': 'Cobra', 'nota': 5},
+        {'texto': 'Elefante', 'nota': 3},
+        {'texto': 'Leão', 'nota': 1},
+      ],
     },
     {
       'texto': 'Qual é o seu instrutor favorito?',
-      'respostas': ['Maria', 'João', 'Leo', 'Pedro'],
+      'respostas': [
+        {'texto': 'Maria', 'nota': 10},
+        {'texto': 'João', 'nota': 10},
+        {'texto': 'Leo', 'nota': 10},
+        {'texto': 'Pedro', 'nota': 10}
+      ],
     }
   ];
 
   var _perguntaSelecionada = 0;
+  var _notaTotal = 0;
 
-  void _responder() {
+  void _responder(int nota) {
     if (temPerguntaSelecionada) {
       setState(() {
         _perguntaSelecionada++;
+        _notaTotal += nota;
       });
     }
 
@@ -66,39 +83,32 @@ class _PerguntasAppState extends State<PerguntasApp> {
       //print(textResp);
       respostas.add(Resposta(textResp, _responder));
     }*/
-
-    List<String> respostas = temPerguntaSelecionada
-        ? _perguntas[_perguntaSelecionada].cast()['resposta']
-        : [];
-    List<Widget> widgets =
-        respostas.map((t) => Resposta(t, _responder)).toList();
-
     return Scaffold(
       appBar: AppBar(
         title: Text("Perguntas"),
       ),
       body: temPerguntaSelecionada
-          ? Column(
-              children: [
-                //Text(perguntas.elementAt(_perguntaSelecionada)),
-                Questao(_perguntas[_perguntaSelecionada]['texto'].toString()),
-                ...widgets,
-                /*Resposta("Resposta 1", _responder),
+          ? Questionario(
+              perguntas: _perguntas,
+              perguntaSelecionada: _perguntaSelecionada,
+              responder: _responder,
+            )
+          //Column(
+          //children: [
+          //Text(perguntas.elementAt(_perguntaSelecionada)),
+          //Questao(_perguntas[_perguntaSelecionada]['texto'].toString()),
+          //...widgets,
+          /*Resposta("Resposta 1", _responder),
           Resposta("Resposta 2", _responder),
           Resposta("Resposta 3", _responder),*/
-                //ElevatedButton(onPressed: _responder, child: Text("Resposta 1")),
-                /*ElevatedButton(
+          //ElevatedButton(onPressed: _responder, child: Text("Resposta 1")),
+          /*ElevatedButton(
               onPressed: () => print("Resposta 2"), child: Text("Resposta 2")),
           ElevatedButton(
               onPressed: funcaoQueRetornaOutraFuncao,
               child: Text("Resposta 3")),*/
-              ],
-            )
-          : Center(
-              child: Text(
-              "Parabéns!",
-              style: TextStyle(fontSize: 28),
-            )),
+          // ],
+          : Resultado(),
     );
   }
 }
