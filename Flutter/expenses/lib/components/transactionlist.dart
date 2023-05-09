@@ -7,13 +7,14 @@ class TransactionList extends StatelessWidget {
   //const TransactionList({super.key});
 
   final List<Transaction> _transactions;
+  final void Function(String) onRemove;
 
-  TransactionList(this._transactions);
+  TransactionList(this._transactions, this.onRemove);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 300,
+      height: 430,
       //child: ListView(
       // Usando builder, não serão todos os elementos renderizados,
       // só os que aparecem na tela.
@@ -44,6 +45,38 @@ class TransactionList extends StatelessWidget {
               itemBuilder: (context, index) {
                 final tr = _transactions[index];
                 return Card(
+                  elevation: 5,
+                  margin: EdgeInsets.symmetric(
+                    vertical: 8,
+                    horizontal: 5,
+                  ),
+                  child: ListTile(
+                    leading: CircleAvatar(
+                      backgroundColor: Theme.of(context).colorScheme.primary,
+                      radius: 30,
+                      child: Padding(
+                        padding: EdgeInsets.all(6),
+                        child: FittedBox(child: Text('R\$${tr.value}')),
+                      ),
+                    ),
+                    title: Text(
+                      tr.title,
+                      style: Theme.of(context).textTheme.headline6,
+                    ),
+                    subtitle: Text(
+                      DateFormat('d MMM y').format(tr.date),
+                    ),
+                    trailing: IconButton(
+                      icon: Icon(
+                        Icons.delete,
+                      ),
+                      color: Colors.red,
+                      onPressed: () => onRemove(tr.id),
+                    ),
+                  ),
+                );
+
+                /*Card(
                   child: Row(
                     children: [
                       Container(
@@ -88,7 +121,7 @@ class TransactionList extends StatelessWidget {
                       )
                     ],
                   ),
-                );
+                );*/
               },
             ),
     );
