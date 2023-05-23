@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:math';
 import 'package:expenses/components/transactionform.dart';
 import 'package:expenses/components/transactionlist.dart';
+//import 'package:flutter/services.dart';
 import '/models/transaction.dart';
 import 'components/chart.dart';
 
@@ -12,6 +13,11 @@ class ExpensesApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    /*SystemChrome.setPreferredOrientations([
+      // Mesmo ao girar o aparelho o app não acompanha.
+      DeviceOrientation.portraitUp,
+    ]);*/
+
     final ThemeData tema = ThemeData();
 
     return MaterialApp(
@@ -41,8 +47,9 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final List<Transaction> _transactions = [
-    /*Transaction(
+  final List<Transaction> _transactions = [];
+  /*final List<Transaction> _transactions = [
+    Transaction(
         id: 't0',
         title: 'Conta Antiga',
         value: 310.76,
@@ -57,8 +64,10 @@ class _MyHomePageState extends State<MyHomePage> {
       title: 'Conta de Luz',
       value: 211.36,
       date: DateTime.now().subtract(Duration(days: 4)),
-    ),*/
-  ];
+    ),
+  ];*/
+
+  bool _showChart = false;
 
   List<Transaction> get _recentTransactions {
     return _transactions.where((tr) {
@@ -99,27 +108,65 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Despesas Pessoais'),
-        actions: [
+    bool isLandscape =
+        MediaQuery.of(context).orientation == Orientation.landscape;
+
+    final appBar = AppBar(
+      title: Text('Despesas Pessoais'),
+      actions: [
+        if (isLandscape)
           IconButton(
-            icon: Icon(Icons.add),
-            onPressed: () => _openTransactionFormModal(context),
-          )
-        ],
-      ),
+            icon: Icon(_showChart ? Icons.list : Icons.show_chart),
+            onPressed: () {
+              setState(() {
+                _showChart = !_showChart;
+              });
+            },
+          ),
+        IconButton(
+          icon: Icon(Icons.add),
+          onPressed: () => _openTransactionFormModal(context),
+        )
+      ],
+    );
+
+    final availableHeight = MediaQuery.of(context).size.height -
+        appBar.preferredSize.height -
+        MediaQuery.of(context).padding.top;
+
+    return Scaffold(
+      appBar: appBar,
       body: SingleChildScrollView(
         child: Column(
           //mainAxisAlignment: MainAxisAlignment.spaceAround,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Container(
-              width: double.infinity,
-              child: Chart(_recentTransactions),
-            ),
-            //TransactionUser(),
-            TransactionList(_transactions, _deleteTransaction),
+            /*if (isLandscape)
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text('Exibir Gráfico'),
+                  Switch(
+                    value: _showChart,
+                    onChanged: (value) {
+                      setState(() {
+                        _showChart = value;
+                      });
+                    },
+                  ),
+                ],
+              ),*/
+            if (_showChart || !isLandscape)
+              Container(
+                height: availableHeight * (isLandscape ? 0.7 : 0.25),
+                width: double.infinity,
+                child: Chart(_recentTransactions),
+              ),
+            if (!_showChart || !isLandscape)
+              //TransactionUser(),
+              Container(
+                  height: availableHeight * 0.75,
+                  child: TransactionList(_transactions, _deleteTransaction)),
           ],
         ),
       ),

@@ -42,70 +42,77 @@ class _TransactionFormState extends State<TransactionForm> {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: 5,
-      child: Padding(
-        padding: const EdgeInsets.all(10),
-        child: Column(children: [
-          TextField(
-            //onChanged: (newValue) => title = newValue,
-            controller: _titleController,
-            onSubmitted: (value) => _submitForm(),
-            decoration: InputDecoration(
-              labelText: 'Título',
-            ),
+    return SingleChildScrollView(
+      child: Card(
+        elevation: 5,
+        child: Padding(
+          padding: EdgeInsets.only(
+            top: 10,
+            right: 10,
+            left: 10,
+            bottom: 10 + MediaQuery.of(context).viewInsets.bottom,
           ),
-          TextField(
-            //onChanged: (newValue) => value = newValue,
-            controller: _valueController,
-            keyboardType: TextInputType.numberWithOptions(decimal: true),
-            onSubmitted: (value) => _submitForm(),
-            decoration: InputDecoration(
-              labelText: 'Valor (R\$)',
-            ),
-          ),
-          Row(
-            children: [
-              Expanded(
-                child: Text(
-                  _selectedDate == null
-                      ? "Nenhuma data selecionada!"
-                      : 'Data Selecionada: ${DateFormat('dd/MM/y').format(_selectedDate)}',
-                ),
+          child: Column(children: [
+            TextField(
+              //onChanged: (newValue) => title = newValue,
+              controller: _titleController,
+              onSubmitted: (value) => _submitForm(),
+              decoration: InputDecoration(
+                labelText: 'Título',
               ),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.white,
-                  foregroundColor: Theme.of(context).colorScheme.primary,
-                ),
-                onPressed: _showDatePicker,
-                child: Text(
-                  "Selecionar Data",
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
+            ),
+            TextField(
+              //onChanged: (newValue) => value = newValue,
+              controller: _valueController,
+              keyboardType: TextInputType.numberWithOptions(decimal: true),
+              onSubmitted: (value) => _submitForm(),
+              decoration: InputDecoration(
+                labelText: 'Valor (R\$)',
+              ),
+            ),
+            Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    _selectedDate == null
+                        ? "Nenhuma data selecionada!"
+                        : 'Data Selecionada: ${DateFormat('dd/MM/y').format(_selectedDate)}',
                   ),
                 ),
-              ),
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Theme.of(context).colorScheme.primary,
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.white,
+                    foregroundColor: Theme.of(context).colorScheme.primary,
+                  ),
+                  onPressed: _showDatePicker,
+                  child: Text(
+                    "Selecionar Data",
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                 ),
-                onPressed: () {
-                  //print(titleController.text);
-                  //print(valueController.text);
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Theme.of(context).colorScheme.primary,
+                  ),
+                  onPressed: () {
+                    //print(titleController.text);
+                    //print(valueController.text);
 
-                  _submitForm();
-                },
-                child: Text("Nova Transação"),
-              ),
-            ],
-          )
-        ]),
+                    _submitForm();
+                  },
+                  child: Text("Nova Transação"),
+                ),
+              ],
+            )
+          ]),
+        ),
       ),
     );
   }
