@@ -64,9 +64,14 @@ class TransactionList extends StatelessWidget {
                     DateFormat('d MMM y').format(tr.date),
                   ),
                   trailing: MediaQuery.of(context).size.width > 400
-                      ? ElevatedButton(
+                      ? ElevatedButton.icon(
                           onPressed: () {},
-                          child: null,
+                          icon: Icon(Icons.delete),
+                          label: Text("Excluir"),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.white,
+                            foregroundColor: Colors.red,
+                          ),
                         )
                       : IconButton(
                           icon: Icon(
