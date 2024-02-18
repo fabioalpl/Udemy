@@ -61,6 +61,13 @@ class _PerguntasAppState extends State<PerguntasApp> {
     //print("Pergunta respondida");
   }
 
+  void _reiniciarQuestionario() {
+    setState(() {
+      _perguntaSelecionada = 0;
+      _notaTotal = 0;
+    });
+  }
+
   void Function() funcaoQueRetornaOutraFuncao() {
     return () {
       print("Pergunta respondida #02");
@@ -108,7 +115,7 @@ class _PerguntasAppState extends State<PerguntasApp> {
               onPressed: funcaoQueRetornaOutraFuncao,
               child: Text("Resposta 3")),*/
           // ],
-          : Resultado(),
+          : Resultado(_notaTotal, _reiniciarQuestionario),
     );
   }
 }
